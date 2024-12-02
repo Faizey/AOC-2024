@@ -1,0 +1,7 @@
+{
+	"extends": "@tsconfig/node16/tsconfig.js",
+	"compilerOptions": {
+		"types": ["node"],
+	},
+	"typeRoots": ["../node_modules/@types"]
+}
