@@ -4,17 +4,6 @@ Workspace: # AOC-2024
 
 Advent of Code 2024 solutions implemented in TypeScript and JavaScript. Each day is organized into separate folders containing solutions for both parts of the puzzle.
 
-## Project Structure
-
-day-X
-part-1-solution.ts
-: Solution for Part 1 of Day X
-part-2-solution.ts
-: Solution for Part 2 of Day X
-  -
-puzzle.txt
-: Puzzle input for Day 1.
-
 ## Scripts
 
 - **Build the project**:
