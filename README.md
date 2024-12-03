@@ -21,10 +21,10 @@ Advent of Code 2024 solutions implemented in TypeScript and JavaScript. Each day
 - **Execute solutions**:
 
   ```sh
-  npm run execute -- <day>
+  npm run execute <day>
   ```
 
-  Replace `<day>` with the day number (e.g., `1` for Day 1).
+  Replace `<day>` with the day (e.g., `day-1` for Day 1).
 
 - **Create a new day folder with solution templates**:
 
