@@ -10,9 +10,7 @@ async function main() {
 
 	try {
 		const solutions = await import(`./${day}/solution.js`);
-		console.log({solutions})
 		const puzzle = await fs.readFile(`./${day}/puzzle.txt`);
-		console.log({puzzle})
 
 		const part_1_timer = process.hrtime();
 		const part_1_solution = solutions.part_1(puzzle.toString());
