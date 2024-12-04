@@ -1,10 +1,7 @@
-const fs = require("fs");
+import fs from "fs/promises";
 
-function main() {
+async function main() {
 	const day = process.argv[2];
-
-	const partOneStartTimer = process.hrtime();
-	let parOneEndTimer;
 
 	if (!day) {
 		console.log("Please provide a day");
@@ -12,49 +9,44 @@ function main() {
 	}
 
 	try {
-		const partOneSolutionFn = require(`./${day}/part-1-solution`);
-		const partOnePuzzle = fs.readFileSync(`./${day}/puzzle.txt`);
-		parOneEndTimer = process.hrtime(partOneStartTimer);
-		console.log(
-			`Part one: ${partOneSolutionFn(partOnePuzzle.toString())} points`
-		);
+		const solutions = await import(`./${day}/solution.js`);
+		console.log({solutions})
+		const puzzle = await fs.readFile(`./${day}/puzzle.txt`);
+		console.log({puzzle})
+
+		const part_1_timer = process.hrtime();
+		const part_1_solution = solutions.part_1(puzzle.toString());
+		const part_1_timer_end = process.hrtime(part_1_timer);
+
+		console.log(`Part one: ${part_1_solution} points`);
+
+		if (part_1_timer_end) {
+			console.log(
+				`Part one took ${part_1_timer_end[0]}s ${
+					part_1_timer_end[1] / 1000000
+				}ms`
+			);
+		}
+
+		const part_2_timer = process.hrtime();
+		const part_2_solution = solutions.part_2(puzzle.toString());
+		const part_2_timer_end = process.hrtime(part_2_timer);
+
+		console.log(`Part two: ${part_2_solution} points`);
+
+		if (part_2_timer_end) {
+			console.log(
+				`Part two took ${part_2_timer_end[0]}s ${
+					part_2_timer_end[1] / 1000000
+				}ms`
+			);
+		}
 	} catch (e) {
 		if ((e as NodeJS.ErrnoException).code === "MODULE_NOT_FOUND") {
 			console.log(`Part 1 not found`);
 		} else {
 			throw e;
 		}
-	}
-
-	const partTwoStartTimer = process.hrtime();
-	let partTwoEndTimer;
-	try {
-		const partTwoSolutionFn = require(`./${day}/part-2-solution`);
-		const puzzle = fs.readFileSync(`./${day}/puzzle.txt`);
-		partTwoEndTimer = process.hrtime(partTwoStartTimer);
-		console.log(`Part two: ${partTwoSolutionFn(puzzle.toString())} points`);
-	} catch (e) {
-		if ((e as NodeJS.ErrnoException).code === "MODULE_NOT_FOUND") {
-			console.log(`Part 2 not found`);
-		} else {
-			throw e;
-		}
-	}
-
-	if (parOneEndTimer) {
-		console.log(
-			`Part one took ${parOneEndTimer[0]}s ${
-				parOneEndTimer[1] / 1000000
-			}ms`
-		);
-	}
-
-	if (partTwoEndTimer) {
-		console.log(
-			`Part two took ${partTwoEndTimer[0]}s ${
-				partTwoEndTimer[1] / 1000000
-			}ms`
-		);
 	}
 }
 

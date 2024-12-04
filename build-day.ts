@@ -13,8 +13,8 @@ const folderPath = path.join(__dirname, folderName);
 fs.mkdirSync(folderPath, { recursive: true });
 
 const files = [
-	{ name: "part-1-solution.ts", content: "module.exports = () => null;" },
-	{ name: "part-2-solution.ts", content: "module.exports = () => null;" },
+	{ name: "part-1-solution.ts", content: "module.exports = (input: String) => null;" },
+	{ name: "part-2-solution.ts", content: "module.exports = (input: String) => null;" },
 	{ name: "puzzle.txt", content: "" },
 ];
 
