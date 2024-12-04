@@ -34,7 +34,6 @@ function findWord(
 
 export function part_1(input: string) {
 	const matrix = input.replace("\r", "").split("\n");
-	console.log(matrix.length);
 	const word = "XMAS";
 	let answer = 0;
 
@@ -62,27 +61,26 @@ export function part_2(input: string) {
 	for (let y = 1; y < matrix.length - 1; y++) {
 		for (let x = 0; x < matrix[y].length; x++) {
 			let count = 0;
-			const l = matrix[y][x];
 
-			if (l === "A") {
-				const topLeftLetter = matrix[y - 1][x - 1];
-				const topRightLetter = matrix[y - 1][x + 1];
-				const bottomLeftLetter = matrix[y + 1][x - 1];
-				const bottomRightLetter = matrix[y + 1][x + 1];
+			if (matrix[y][x] === "A") {
+				const topLeft = matrix[y - 1][x - 1];
+				const topRight = matrix[y - 1][x + 1];
+				const bottomLeft = matrix[y + 1][x - 1];
+				const bottomRight = matrix[y + 1][x + 1];
 
-				if (topLeftLetter === "M" && bottomRightLetter === "S") {
+				if (topLeft === "M" && bottomRight === "S") {
 					count += 1;
 				}
 
-				if (topRightLetter === "M" && bottomLeftLetter === "S") {
+				if (topRight === "M" && bottomLeft === "S") {
 					count += 1;
 				}
 
-				if (bottomRightLetter === "M" && topLeftLetter === "S") {
+				if (bottomRight === "M" && topLeft === "S") {
 					count += 1;
 				}
 
-				if (bottomLeftLetter === "M" && topRightLetter === "S") {
+				if (bottomLeft === "M" && topRight === "S") {
 					count += 1;
 				}
 			}
