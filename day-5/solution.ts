@@ -1,4 +1,4 @@
-function get_rules_and_pages(input) {
+function get_rules_and_pages(input: string) {
 	const rulesArr: number[][] = [];
 	const pagesArr: number[][] = [];
 
