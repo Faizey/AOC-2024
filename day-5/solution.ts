@@ -1,23 +1,29 @@
-function part_1(input: string) {
-	const rules: number[][] = [];
-	const allPages: number[][] = [];
-	let answer = 0;
+function get_rules_and_pages(input) {
+	const rulesArr: number[][] = [];
+	const pagesArr: number[][] = [];
 
 	input.split("\n").forEach((l) => {
 		if (!l) return;
 
 		if (l.includes("|")) {
-			rules.push(l.split("|").map(Number));
+			rulesArr.push(l.split("|").map(Number));
 			return;
 		}
 
-		allPages.push(l.split(",").map(Number));
+		pagesArr.push(l.split(",").map(Number));
 	});
 
-	allPages.forEach((pages) => {
+	return { rulesArr, pagesArr };
+}
+
+function part_1(input: string) {
+	const { rulesArr, pagesArr } = get_rules_and_pages(input);
+	let answer = 0;
+
+	pagesArr.forEach((pages) => {
 		let isCorrect = true;
 
-		rules.forEach((rule) => {
+		rulesArr.forEach((rule) => {
 			if (!isCorrect) {
 				return;
 			}
@@ -45,26 +51,14 @@ function part_1(input: string) {
 }
 
 function part_2(input: string) {
-	const rules: number[][] = [];
-	const allPages: number[][] = [];
+	const { rulesArr, pagesArr } = get_rules_and_pages(input);
 	const incorrectPages: number[][] = [];
 	let answer = 0;
 
-	input.split("\n").forEach((l) => {
-		if (!l) return;
-
-		if (l.includes("|")) {
-			rules.push(l.split("|").map(Number));
-			return;
-		}
-
-		allPages.push(l.split(",").map(Number));
-	});
-
-	allPages.forEach((pages) => {
+	pagesArr.forEach((pages) => {
 		let skip = false;
 
-		rules.forEach((rule) => {
+		rulesArr.forEach((rule) => {
 			if (skip) return;
 
 			const [before, after] = rule;
@@ -87,7 +81,7 @@ function part_2(input: string) {
 		let keepTrying = true;
 		while (keepTrying) {
 			let hasSorted = true;
-			rules.forEach((rule) => {
+			rulesArr.forEach((rule) => {
 				const [before, after] = rule;
 				const pageBeforeIndex = pages.indexOf(before);
 				const pageAfterIndex = pages.indexOf(after);
