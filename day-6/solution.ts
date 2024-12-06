@@ -8,7 +8,6 @@ const directions = {
 	W: [-1, 0],
 };
 
-let guard_count = 0;
 function find_guard(matrix: string[]) {
 	const directions: { [key in GuardDirections]: string } = {
 		"^": "N",
@@ -33,7 +32,7 @@ function find_guard(matrix: string[]) {
 	}
 }
 
-class Guard_2 {
+class Guard {
 	startX: number;
 	startY: number;
 	startDir: CardinalDirection;
@@ -49,7 +48,6 @@ class Guard_2 {
 		y?: number,
 		dir?: CardinalDirection
 	) {
-		guard_count++;
 		const guardPosition = find_guard(matrix);
 
 		if (!guardPosition) {
@@ -151,7 +149,7 @@ class Guard_2 {
 
 function part_1(input: string) {
 	const matrix = input.replace("\r", "").split("\n");
-	const guard = new Guard_2(matrix);
+	const guard = new Guard(matrix);
 	const answer: string[] = [];
 
 	while (guard.is_next_position_valid()) {
@@ -171,7 +169,7 @@ function part_1(input: string) {
 
 function part_2(input: string) {
 	const matrix = input.replace("\r", "").split("\n");
-	const guard = new Guard_2(matrix);
+	const guard = new Guard(matrix);
 	const correct_positions: Set<string> = new Set();
 	let answer = 0;
 
@@ -199,7 +197,7 @@ function part_2(input: string) {
 				: row
 		);
 
-		const temp_guard = new Guard_2(
+		const temp_guard = new Guard(
 			tmp_matrix,
 			guard.startX,
 			guard.startY,
