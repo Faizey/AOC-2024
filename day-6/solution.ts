@@ -98,13 +98,25 @@ class Guard_2 {
 			return;
 		}
 
-		this.updateMatrix(this.x, this.y, this.x + dirX, this.y + dirY, "X");
+		this.updateMatrix(
+			this.x,
+			this.y,
+			this.x + dirX,
+			this.y + dirY,
+			"X" as CardinalDirection
+		);
 
 		this.x = this.x + dirX;
 		this.y = this.y + dirY;
 	}
 
-	updateMatrix(x, y, nextX, nextY, char) {
+	updateMatrix(
+		x: number,
+		y: number,
+		nextX: number,
+		nextY: number,
+		char: CardinalDirection
+	) {
 		let tmp_matrix = [...this.matrix];
 
 		const row = tmp_matrix[y].split("");
@@ -142,13 +154,7 @@ function part_1(input: string) {
 	const guard = new Guard_2(matrix);
 	const answer: string[] = [];
 
-	let outOfBounds = false;
-	while (!outOfBounds) {
-		if (!guard.is_next_position_valid()) {
-			outOfBounds = true;
-			break;
-		}
-
+	while (guard.is_next_position_valid()) {
 		guard.move();
 	}
 
@@ -166,39 +172,32 @@ function part_1(input: string) {
 function part_2(input: string) {
 	const matrix = input.replace("\r", "").split("\n");
 	const guard = new Guard_2(matrix);
-	const correct_positions: string[] = [];
+	const correct_positions: Set<string> = new Set();
 	let answer = 0;
 
-	let outOfBounds = false;
-	while (!outOfBounds) {
-		if (!guard.is_next_position_valid()) {
-			outOfBounds = true;
-			break;
-		}
-
+	while (guard.is_next_position_valid()) {
 		guard.move();
 	}
 
-	let currentPos = 0;
+	let guard_count = 1;
 	guard.positions.forEach((value, key) => {
-		currentPos++;
-		// console.log(`TRYING: ${currentPos}`);
-		const [_x, _y, dir] = key.split(",") as [
-			string,
-			string,
-			CardinalDirection
-		];
-		const objectX = parseInt(_x);
-		const objectY = parseInt(_y);
-
+		guard_count++;
+		if (guard_count % 100 === 0) {
+			console.log(
+				"Positions remaining: ",
+				guard.positions.size - guard_count
+			);
+		}
+		const [objectX, objectY, dir] = key.split(",").map(Number);
 		if (objectX === guard.startX && objectY === guard.startY) {
 			return;
 		}
 
-		const tmp_matrix = [...matrix];
-		const row = tmp_matrix[objectY].split("");
-		row[objectX] = "O";
-		tmp_matrix[objectY] = row.join("");
+		const tmp_matrix = matrix.map((row, index) =>
+			index === objectY
+				? row.slice(0, objectX) + "O" + row.slice(objectX + 1)
+				: row
+		);
 
 		const temp_guard = new Guard_2(
 			tmp_matrix,
@@ -207,43 +206,27 @@ function part_2(input: string) {
 			guard.startDir
 		);
 
-		let stop = false;
 		let loop_count = 0;
-		let last_loop_count = 0;
-
-		while (!stop) {
-			if (last_loop_count !== loop_count && loop_count % 100 === 0) {
-				last_loop_count = loop_count;
-			}
-			if (!temp_guard.is_next_position_valid()) {
-				stop = true;
-				break;
-			}
+		while (temp_guard.is_next_position_valid()) {
+			temp_guard.move();
+			loop_count++;
 
 			if (
 				Array.from(temp_guard.positions.values()).some(
 					(value) => value >= 2
 				)
 			) {
-				stop = true;
-				if (
-					correct_positions.findIndex(
-						(pos) => pos === `${objectX},${objectY}`
-					) === -1
-				) {
-					correct_positions.push(`${objectX},${objectY}`);
-					return;
+				const pos = `${objectX},${objectY}`;
+				if (!correct_positions.has(pos)) {
+					correct_positions.add(pos);
+					answer++;
 				}
-				answer++;
 				break;
 			}
-
-			temp_guard.move();
-			loop_count++;
 		}
 	});
 
-	return correct_positions.length;
+	return correct_positions.size;
 }
 
 export { part_1, part_2 };
