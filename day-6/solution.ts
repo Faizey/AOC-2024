@@ -1,5 +1,4 @@
 type GuardDirections = "^" | ">" | "v" | "<";
-
 type CardinalDirection = "N" | "E" | "S" | "W";
 
 const directions = {
@@ -9,6 +8,7 @@ const directions = {
 	W: [-1, 0],
 };
 
+let guard_count = 0;
 function find_guard(matrix: string[]) {
 	const directions: { [key in GuardDirections]: string } = {
 		"^": "N",
@@ -137,88 +137,12 @@ class Guard_2 {
 	}
 }
 
-// class Guard {
-// 	x: number;
-// 	y: number;
-// 	dir: CardinalDirection;
-// 	matrix: string[];
-// 	positions: Map<string, number>;
-
-// 	constructor(matrix: string[]) {
-// 		const guardPosition = find_guard(matrix);
-
-// 		if (!guardPosition) {
-// 			throw new Error("Guard not found in the matrix");
-// 		}
-
-// 		this.x = guardPosition.x;
-// 		this.y = guardPosition.y;
-// 		this.dir = guardPosition.dir;
-// 		this.matrix = matrix;
-// 		this.positions = new Map();
-// 	}
-
-// 	is_next_position_valid() {
-// 		const [dirX, dirY] = directions[this.dir];
-
-// 		const is_valid =
-// 			this.x + dirX >= 0 &&
-// 			this.y + dirY >= 0 &&
-// 			this.x + dirX < this.matrix[0].length &&
-// 			this.y + dirY < this.matrix.length;
-
-// 		if (!is_valid) {
-// 			this.store_position();
-// 			console.log("Invalid coord", {
-// 				nextX: this.x + dirX >= 0,
-// 				nextY: this.y + dirY >= 0,
-// 				inBoundX: this.x + dirX < this.matrix[0].length,
-// 				inBoundY: this.y + dirY < this.matrix.length,
-// 			});
-// 		}
-
-// 		return is_valid;
-// 	}
-
-// 	move() {
-// 		this.store_position();
-
-// 		const [dirX, dirY] = directions[this.dir];
-// 		const nextPos = this.matrix[this.y + dirY][this.x + dirX];
-
-// 		if (nextPos === "#") {
-// 			this.rotate();
-// 			return;
-// 		}
-
-// 		this.x = this.x + dirX;
-// 		this.y = this.y + dirY;
-// 	}
-
-// 	rotate() {
-// 		const dir_keys = Object.keys(directions);
-// 		const dir_index = dir_keys.indexOf(this.dir);
-
-// 		if (dir_index + 1 >= dir_keys.length) {
-// 			const next_dir_key = dir_keys[0];
-// 			this.dir = next_dir_key as CardinalDirection;
-// 		} else {
-// 			const next_dir_key = dir_keys[dir_index + 1];
-// 			this.dir = next_dir_key as CardinalDirection;
-// 		}
-// 	}
-
-// 	store_position() {
-// 		const prevCount = this.positions.get(`${this.x},${this.y}`) ?? 0;
-// 		this.positions.set(`${this.x},${this.y}`, prevCount + 1);
-// 	}
-// }
 function part_1(input: string) {
 	const matrix = input.replace("\r", "").split("\n");
 	const guard = new Guard_2(matrix);
-	const answer = [];
-	let outOfBounds = false;
+	const answer: string[] = [];
 
+	let outOfBounds = false;
 	while (!outOfBounds) {
 		if (!guard.is_next_position_valid()) {
 			outOfBounds = true;
@@ -229,7 +153,7 @@ function part_1(input: string) {
 	}
 
 	guard.positions.forEach((value, key) => {
-		const [x, y, dir] = key.split(",");
+		const [x, y, _] = key.split(",");
 		const xy = `${x},${y}`;
 		if (!answer.includes(xy)) {
 			answer.push(xy);
@@ -238,8 +162,6 @@ function part_1(input: string) {
 
 	return answer.length;
 }
-
-let guard_count = 0;
 
 function part_2(input: string) {
 	const matrix = input.replace("\r", "").split("\n");
@@ -284,9 +206,6 @@ function part_2(input: string) {
 			guard.startY,
 			guard.startDir
 		);
-
-		// console.log("Guard Count: ", guard_count);
-		// console.log(`Trying: ${objectX},${objectY},${dir}`);
 
 		let stop = false;
 		let loop_count = 0;
