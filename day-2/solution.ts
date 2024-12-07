@@ -34,7 +34,7 @@ export function part_1(input: string) {
 	return rows.length - failCount;
 }
 
-export function part_2 (input: string)  {
+export function part_2(input: string) {
 	const rows = input.replaceAll("\r", "").split("\n");
 	let safeCount = 0;
 
@@ -52,7 +52,7 @@ export function part_2 (input: string)  {
 	}
 
 	return safeCount;
-};
+}
 
 function isSafe(levels: number[]): boolean {
 	let direction = null;

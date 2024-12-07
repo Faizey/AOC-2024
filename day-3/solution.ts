@@ -10,7 +10,7 @@ export function part_1(input: string) {
 	return answer;
 }
 
-export function part_2(input: string)  {
+export function part_2(input: string) {
 	const matches = [
 		...input.matchAll(/do\(\)|don\'t\(\)|mul\((\d{1,3}),(\d{1,3})\)/g),
 	];
@@ -22,12 +22,12 @@ export function part_2(input: string)  {
 
 		if (matchedString === "do()") {
 			enabled = true;
-            continue;
+			continue;
 		}
 
 		if (matchedString === "don't()") {
 			enabled = false;
-            continue;
+			continue;
 		}
 
 		if (!enabled) {
@@ -38,4 +38,4 @@ export function part_2(input: string)  {
 	}
 
 	return answer;
-};
+}

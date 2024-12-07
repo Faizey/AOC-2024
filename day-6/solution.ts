@@ -46,7 +46,7 @@ class Guard {
 		matrix: string[],
 		x?: number,
 		y?: number,
-		dir?: CardinalDirection
+		dir?: CardinalDirection,
 	) {
 		const guardPosition = find_guard(matrix);
 
@@ -101,7 +101,7 @@ class Guard {
 			this.y,
 			this.x + dirX,
 			this.y + dirY,
-			"X" as CardinalDirection
+			"X" as CardinalDirection,
 		);
 
 		this.x = this.x + dirX;
@@ -113,7 +113,7 @@ class Guard {
 		y: number,
 		nextX: number,
 		nextY: number,
-		char: CardinalDirection
+		char: CardinalDirection,
 	) {
 		let tmp_matrix = [...this.matrix];
 
@@ -181,10 +181,7 @@ function part_2(input: string) {
 	guard.positions.forEach((value, key) => {
 		guard_count++;
 		if (guard_count % 100 === 0) {
-			console.log(
-				"Positions remaining: ",
-				guard.positions.size - guard_count
-			);
+			console.log("Positions remaining: ", guard.positions.size - guard_count);
 		}
 		const [objectX, objectY, dir] = key.split(",").map(Number);
 		if (objectX === guard.startX && objectY === guard.startY) {
@@ -194,14 +191,14 @@ function part_2(input: string) {
 		const tmp_matrix = matrix.map((row, index) =>
 			index === objectY
 				? row.slice(0, objectX) + "O" + row.slice(objectX + 1)
-				: row
+				: row,
 		);
 
 		const temp_guard = new Guard(
 			tmp_matrix,
 			guard.startX,
 			guard.startY,
-			guard.startDir
+			guard.startDir,
 		);
 
 		let loop_count = 0;
@@ -210,9 +207,7 @@ function part_2(input: string) {
 			loop_count++;
 
 			if (
-				Array.from(temp_guard.positions.values()).some(
-					(value) => value >= 2
-				)
+				Array.from(temp_guard.positions.values()).some((value) => value >= 2)
 			) {
 				const pos = `${objectX},${objectY}`;
 				if (!correct_positions.has(pos)) {

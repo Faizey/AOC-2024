@@ -22,7 +22,7 @@ async function main() {
 			console.log(
 				`Part one took ${part_1_timer_end[0]}s ${
 					part_1_timer_end[1] / 1000000
-				}ms`
+				}ms`,
 			);
 		}
 
@@ -36,7 +36,7 @@ async function main() {
 			console.log(
 				`Part two took ${part_2_timer_end[0]}s ${
 					part_2_timer_end[1] / 1000000
-				}ms`
+				}ms`,
 			);
 		}
 	} catch (e) {

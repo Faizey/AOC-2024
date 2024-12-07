@@ -11,7 +11,7 @@ function parse_input(input: string) {
 	});
 }
 
-function calculate(operator: string, a: number, b: number) {
+function calculate(operator: string, a: number, b: number): number {
 	switch (operator) {
 		case "*":
 			return a * b;
@@ -20,6 +20,8 @@ function calculate(operator: string, a: number, b: number) {
 		case "||":
 			return parseInt(`${a}${b}`);
 	}
+
+	return 0;
 }
 
 function generate_combinations(
@@ -39,7 +41,7 @@ function generate_combinations(
 	return combinations;
 }
 
-function evaluate_expression(numbers: number[], operators: string[]) {
+function evaluate_expression(numbers: number[], operators: string[]): number {
 	let result = numbers[0];
 	for (let x = 0; x < operators.length; x++) {
 		result = calculate(operators[x], result, numbers[x + 1]);
