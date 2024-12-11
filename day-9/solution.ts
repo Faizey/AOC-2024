@@ -76,23 +76,10 @@ function part_2(input: string) {
 		store.push({ start, end, length: end - start });
 	}
 
+	const first_free_space = store[0].start;
 	let pointer_end = blocks.length - 1;
 
-	function has_space_to_the_left() {
-		let p = pointer_end;
-		let has_space = false;
-
-		while (p > 0) {
-			if (blocks[p] === ".") {
-				has_space = true;
-			}
-			p--;
-		}
-
-		return has_space;
-	}
-
-	while (pointer_end > 0 && has_space_to_the_left()) {
+	while (pointer_end > 0 && pointer_end > first_free_space) {
 
 		if (blocks[pointer_end] === ".") {
 			pointer_end--;
@@ -100,7 +87,7 @@ function part_2(input: string) {
 		}
 
 		let required_space = 0;
-		let number_to_check = blocks[pointer_end];
+		const number_to_check = blocks[pointer_end];
 		let pointer_req = pointer_end;
 
 		while (blocks[pointer_req] === number_to_check) {
