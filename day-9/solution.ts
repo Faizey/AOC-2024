@@ -3,22 +3,25 @@ function part_1(input: string) {
 	let answer = 0;
 	let blocks = [];
 	let num_count = 0;
+	let id = 0;
 
 	disk.forEach((d, i) => {
 		const is_block_file = i % 2 === 0;
 
 		for (let a = 0; a < d; a++) {
-			blocks.push(is_block_file ? i : ".");
+			blocks.push(is_block_file ? id : ".");
 			if (is_block_file) {
 				num_count++;
 			}
 		}
+
+		if (is_block_file) {
+			id++;
+		}
 	});
 
-	blocks = blocks.join("").split("");
 	let pointerEnd = blocks.length - 1;
 	let pointerStart = 0;
-	console.log(num_count);
 
 	for (pointerStart; pointerStart < num_count; pointerStart++) {
 		if (blocks[pointerStart] !== ".") continue;
@@ -38,8 +41,6 @@ function part_1(input: string) {
 
 		answer += block * index;
 	});
-
-	console.log(blocks.join(""));
 
 	return blocks.reduce((acc: number, curr: string | number, index) => {
 		if (typeof curr === "string") return acc;
