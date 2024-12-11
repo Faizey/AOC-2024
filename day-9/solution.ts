@@ -1,18 +1,13 @@
 function part_1(input: string) {
 	const disk = input.split("").map(Number);
 	let answer = 0;
-	let blocks = [];
-	let num_count = 0;
+	let blocks: Array<number | "."> = [];
 	let id = 0;
 
 	disk.forEach((d, i) => {
 		const is_block_file = i % 2 === 0;
-
 		for (let a = 0; a < d; a++) {
 			blocks.push(is_block_file ? id : ".");
-			if (is_block_file) {
-				num_count++;
-			}
 		}
 
 		if (is_block_file) {
@@ -20,20 +15,24 @@ function part_1(input: string) {
 		}
 	});
 
-	let pointerEnd = blocks.length - 1;
 	let pointerStart = 0;
+	let pointerEnd = blocks.length - 1;
 
-	for (pointerStart; pointerStart < num_count; pointerStart++) {
-		if (blocks[pointerStart] !== ".") continue;
+	while (pointerStart < pointerEnd) {
+		if (blocks[pointerStart] !== ".") {
+			pointerStart++;
+			continue;
+		}
 
-		while (blocks[pointerEnd] === ".") {
+		while (blocks[pointerEnd] === "." && pointerEnd > pointerStart) {
 			pointerEnd--;
 		}
 
-		blocks[pointerStart] = blocks[pointerEnd];
-		blocks[pointerEnd] = ".";
-
-		pointerEnd--;
+		if (pointerStart < pointerEnd) {
+			blocks[pointerStart] = blocks[pointerEnd];
+			blocks[pointerEnd] = ".";
+			pointerEnd--;
+		}
 	}
 
 	blocks.forEach((block, index) => {
@@ -42,11 +41,7 @@ function part_1(input: string) {
 		answer += block * index;
 	});
 
-	return blocks.reduce((acc: number, curr: string | number, index) => {
-		if (typeof curr === "string") return acc;
-
-		return acc + curr * index;
-	}, 0);
+	return answer;
 }
 
 function part_2(input: string) {}
