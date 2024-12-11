@@ -46,9 +46,10 @@ function part_1(input: string) {
 
 function part_2(input: string) {
 	const disk = input.split("").map(Number);
-	let answer = 0;
 	let blocks: Array<number | "."> = [];
 	let id = 0;
+	let answer = 0;
+	let store = [];
 
 	disk.forEach((d, i) => {
 		const is_block_file = i % 2 === 0;
@@ -61,10 +62,23 @@ function part_2(input: string) {
 		}
 	});
 
-	let pointer_start = 0;
+	for (let p = 0; p < blocks.length; p++) {
+		if (blocks[p] !== ".") continue;
+
+		let start = p;
+		let end = p;
+
+		while (blocks[p] === ".") {
+			end++;
+			p++;
+		}
+
+		store.push({ start, end, length: end - start });
+	}
+
 	let pointer_end = blocks.length - 1;
-	let first_free_space_index = null;
-	function has_space_to_fill() {
+
+	function has_space_to_the_left() {
 		let p = pointer_end;
 		let has_space = false;
 
@@ -78,66 +92,48 @@ function part_2(input: string) {
 		return has_space;
 	}
 
-	while (pointer_end > 0 && has_space_to_fill()) {
-		let required_space = 0;
-		let available_space = 0;
+	while (pointer_end > 0 && has_space_to_the_left()) {
 
-		// // ------- DEBUG -------
-		// console.log({ pointer_start, pointer_end });
-		// let log_array = Array(blocks.join("").length).fill(" ");
-
-		// log_array[pointer_start] = "^";
-		// log_array[pointer_end] = "v";
-		// console.log(blocks.join(""));
-		// console.log(log_array.join(""));
-		// console.log(" ");
-		// // ------- DEBUG -------
-
-		let pointer_req = pointer_end;
-		let number_to_check = blocks[pointer_end];
-		let counter = 0;
-		while (blocks[pointer_req] === number_to_check) {
-			counter++;
-			pointer_req--;
-		}
-
-		required_space = counter;
-
-		// console.log({ required_space });
-
-		let pointer_avail = pointer_start;
-		counter = 0;
-
-		while (blocks[pointer_avail] === ".") {
-			counter++;
-			pointer_avail++;
-		}
-
-		available_space = counter;
-
-		if (pointer_start >= blocks.length || pointer_start > pointer_end) {
-			pointer_start = 0;
-			pointer_end -= required_space;
-			available_space = 0;
-			required_space = 0;
-			console.log(blocks.join(''))
+		if (blocks[pointer_end] === ".") {
+			pointer_end--;
 			continue;
 		}
 
-		if (available_space >= required_space) {
-			for (let i = 0; i < required_space; i++) {
-				blocks[pointer_start] = blocks[pointer_end];
-				blocks[pointer_end] = ".";
+		let required_space = 0;
+		let number_to_check = blocks[pointer_end];
+		let pointer_req = pointer_end;
 
-				pointer_start++;
-				pointer_end--;
-			}
+		while (blocks[pointer_req] === number_to_check) {
+			required_space++;
+			pointer_req--;
 		}
 
-		pointer_start++;
-	}
+		const i = store.findIndex(
+			(si) => si.length >= required_space && si.end <= pointer_end,
+		);
+		if (i !== -1) {
+			const { start, end, length } = store[i];
 
-	console.log(blocks.join(""));
+			for (let s = 0; s < required_space; s++) {
+				blocks[s + start] = blocks[pointer_end];
+				blocks[pointer_end] = ".";
+
+				pointer_end--;
+			}
+
+			if (length === required_space) {
+				store.splice(i, 1);
+			} else {
+				store.splice(i, 1, {
+					start: start + required_space,
+					end,
+					length: length - required_space,
+				});
+			}
+		} else {
+			pointer_end -= required_space;
+		}
+	}
 
 	blocks.forEach((block, index) => {
 		if (typeof block === "string") return;
