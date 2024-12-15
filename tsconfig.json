@@ -2,7 +2,11 @@
 	"extends": "@tsconfig/node16/tsconfig.js",
 	"compilerOptions": {
 		"module": "Node16",
-		"types": ["node"]
+		"types": ["node"],
+		"baseUrl": ".",
+		"paths": {
+			"@/utils": ["utils.js"]
+		}
 	},
 	"typeRoots": ["../node_modules/@types"]
 }
